@@ -19,6 +19,8 @@ async function generatePlan(goal?: string) {
   // TODO: Replace this with Subconscious agent call
   // const res = await fetch(import.meta.env.VITE_AGENT_URL, {
   //   method: "POST",
+
+//   I want goal, goal prompt
   //   body: JSON.stringify({ goal: goal ?? goalInput ?? "Build me a 10k plan" }),
   // });
   // const data = await res.json();
