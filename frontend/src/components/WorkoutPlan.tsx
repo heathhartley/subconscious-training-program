@@ -1,14 +1,14 @@
 import * as React from "react";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "./ui/Card";
 import { Badge } from "./ui/Badge";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "./ui/Tabs";
-import { Circle, Calendar, Timer, Target } from "lucide-react";
+import { Circle, Calendar, Timer } from "lucide-react";
 
 export interface Workout {
   day: string;
   type: string;
   duration: string;
   description: string;
+  miles?: number;
 }
 
 export interface TrainingWeek {
@@ -39,22 +39,27 @@ export function WorkoutPlan({ plan }: WorkoutPlanProps) {
         <CardDescription>Your personalized weekly workout schedule</CardDescription>
       </CardHeader>
       <CardContent>
-        <Tabs activeIndex={activeWeek} onChange={setActiveWeek}>
-          <TabsList>
-            {plan.weeks.map((week, idx) => (
-              <TabsTrigger
-                key={idx}
-                index={idx}
-                isActive={activeWeek === idx}
-                onClick={() => setActiveWeek(idx)}
-              >
-                Week {week.week}
-              </TabsTrigger>
-            ))}
-          </TabsList>
-
+        {/* Week selector */}
+        <div className="flex gap-2 mb-4">
           {plan.weeks.map((week, idx) => (
-            <TabsContent key={idx} className={activeWeek === idx ? "block" : "hidden"}>
+            <button
+              key={idx}
+              className={`px-3 py-1 rounded ${
+                activeWeek === idx ? "bg-blue-600 text-white" : "bg-gray-200 text-gray-700"
+              }`}
+              onClick={() => setActiveWeek(idx)}
+            >
+              Week {week.week}
+            </button>
+          ))}
+        </div>
+
+        {/* Show active week content */}
+        {plan.weeks.map((week, idx) => {
+          if (idx !== activeWeek) return null; // only render active week
+
+          return (
+            <div key={idx}>
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
                 <h3 className="font-semibold text-blue-900 mb-1">Week {week.week} Focus</h3>
                 <p className="text-sm text-blue-700">{week.description}</p>
@@ -75,6 +80,11 @@ export function WorkoutPlan({ plan }: WorkoutPlanProps) {
                             <Timer className="w-3 h-3" />
                             {workout.duration}
                           </span>
+                          {workout.miles !== undefined && (
+                            <span className="text-sm text-gray-600 flex items-center gap-1">
+                              {workout.miles} mi
+                            </span>
+                          )}
                         </div>
                         <p className="text-sm text-gray-700">{workout.description}</p>
                       </div>
@@ -82,19 +92,9 @@ export function WorkoutPlan({ plan }: WorkoutPlanProps) {
                   </Card>
                 ))}
               </div>
-
-              <div className="bg-green-50 border border-green-200 rounded-lg p-4 flex items-start gap-3">
-                <Target className="w-5 h-5 text-green-600 mt-0.5" />
-                <div>
-                  <h4 className="font-semibold text-green-900 mb-1">Week {week.week} Goal</h4>
-                  <p className="text-sm text-green-700">
-                    Complete all scheduled workouts and listen to your body. Rest is part of training!
-                  </p>
-                </div>
-              </div>
-            </TabsContent>
-          ))}
-        </Tabs>
+            </div>
+          );
+        })}
       </CardContent>
     </Card>
   );

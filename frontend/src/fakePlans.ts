@@ -28,6 +28,30 @@ export const fakePlans: TrainingPlan[] = [
           },
         ],
       },
+      {
+        week: 2,
+        description: "Build consistency with easy running",
+        workouts: [
+          {
+            day: "Monday",
+            type: "Rest",
+            duration: "0 Min",
+            description: "Eat some chips",
+          },
+          {
+            day: "Wednesday",
+            type: "Run / Walk",
+            duration: "25 min",
+            description: "Alternate running and walking",
+          },
+          {
+            day: "Saturday",
+            type: "Long Easy Run",
+            duration: "30 min",
+            description: "Slow pace, build endurance",
+          },
+        ],
+      },
     ],
   },
   {

@@ -1,11 +1,11 @@
 import * as React from "react";
 
-interface TabsProps {
-  activeIndex: number;
-  onChange: (index: number) => void;
-  className?: string;
-  children: React.ReactNode;
-}
+// interface TabsProps {
+//   activeIndex: number;
+//   onChange: (index: number) => void;
+//   className?: string;
+//   children: React.ReactNode;
+// }
 
 interface TabsListProps {
   className?: string;
@@ -17,9 +17,9 @@ interface TabTriggerProps extends React.ButtonHTMLAttributes<HTMLButtonElement> 
   isActive?: boolean;
 }
 
-export function Tabs({ children, activeIndex, onChange, className = "" }: TabsProps) {
-  return <div className={`flex flex-col gap-2 ${className}`}>{children}</div>;
-}
+// export function Tabs({ children, activeIndex, onChange, className = "" }: TabsProps) {
+//   return <div className={`flex flex-col gap-2 ${className}`}>{children}</div>;
+// }
 
 export function TabsList({ children, className = "" }: TabsListProps) {
   return <div className={`flex gap-2 ${className}`}>{children}</div>;
