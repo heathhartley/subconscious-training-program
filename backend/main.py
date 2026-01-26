@@ -34,27 +34,31 @@ async def generate_endpoint(request: Request):
     body = await request.json()
     goal = body.get("goal", "Build me a 10k plan")
     instructions = body.get("instructions", "")
-    print("goal")
-    print(goal)
-    print("instructions")
-    print(instructions)
 
     # Construct prompt for Subconscious
     prompt = f"""
-    System Goal:
-    Generate a training plan for your client based on their goals, instructions, and past data. Give the plan in a json format as describe below.
+    SYSTEM ROLE:
+    You are a professional fitnes coach that produces structured training plans.
 
-    Who you are:
-    You are a professional fitness coach that focuses on creating personalized fitness plans based on your customers wants. Focus on the users instruction and goals to create the personalized plan. 
-    You may use past history from strava to better understand your clients fitness journey. 
+    TASK:
+    Generate a training plan based on the user's goals, instructions, and past data.
+    Return the result as VALID, MACHINE-PARSABLE JSON ONLY.
 
     User's goal:
     {goal}
     User's instructions for training plan:
     {instructions}
 
-    Example json output (your output should follow this structure, but the number of weeks, workouts per week, and distances can vary based on the user’s goals and experience):
-
+    Additional Details:
+    - Provide the correct number of training weeks based on the user's goals and past metrics.
+    - Each week should have 2-5 workouts depending on user goals and past experience.
+    - Include realistic progression in intensity.
+    - Include realistic tapering.
+    - Use clear, concise language.
+    - Days can be skipped for rest.   
+    
+    REQUIRED OUTPUT FORMAT (REFERENCE STRUCTURE — NOT OPTIONAL):
+    The response MUST be a single JSON object matching this schema exactly:
     {{
         "name": "Sample Training Plan",
         "description": "A personalized program to improve running performance",
@@ -76,27 +80,40 @@ async def generate_endpoint(request: Request):
         ]
     }}
 
-    Additional Details:
-    - The user's goal overrides any of these instructions if they specifically ask for it.
-    - Provide the correct number of training weeks based on the user's goals and past metrics.
-    - Each week should have 3-5 workouts depending on user goals and past experience.
-    - Include realistic progression in intensity.
-    - Use clear, concise language.
-    - Days can be skipped for rest.
+    IMPORTANT RULES (READ CAREFULLY):
 
-    Negative instructions:
-    - DO NOT add explanations, commentary, or anything outside the JSON.
-    - DO NOT include personal greetings or salutations.
-    - DO NOT add HTML or markdown formatting.
-    - DO NOT add unescaped double quotes (") in any JSON value. Use escaped quotes (\") if needed.
-    - Output **valid JSON only**, no additional commentary or formatting.
-    - Your output should be pure JSON.
+    1. You MUST include EVERY week from week 1 through week N.
+    2. DO NOT skip weeks.
+    3. DO NOT summarize weeks.
+    4. DO NOT use ellipses (...).
+    5. DO NOT use comments (// or /* */).
+    6. DO NOT explain what future weeks will be like — WRITE THEM.
+    7. DO NOT add explanations, commentary, or anything inside or outside of the the JSON.
+    8. If the plan is long, you MUST still output ALL weeks fully.
+    9. Output must be STRICT JSON — no markdown, no commentary, no extra text.
+
+    CONTENT RULES:
+    - Each week must contain 2–5 workouts.
+    - Mileage and intensity should progress realistically.
+    - Include cutback weeks every 3–4 weeks if appropriate.
+    - The user's goal overrides all defaults.
+
+    STRING SAFETY RULES:
+    - DO NOT include unescaped double quotes inside string values.
+    - Avoid characters that could break JSON.
+    - Keep descriptions concise and literal.
+
+    FINAL CHECK BEFORE RESPONDING:
+    - Is the output valid JSON?
+    - Are ALL weeks explicitly listed?
+    - Is there ZERO text outside the JSON?
 
     ---
 
+    RETURN ONLY THE JSON OBJECT.
+
 
     """
-    # Give your final response formatted in markdown.
 
     client = Subconscious(api_key=SUBCONSCIOUS_API_KEY)
 
@@ -152,8 +169,8 @@ def get_strava_stats(request: Request):
         is_run = random.random() < 0.6
 
         if is_run:
-            # Random distance between 3 and 10 miles
-            distance_miles = round(random.uniform(3, 10), 1)
+            # Random distance between 1 and 10 miles
+            distance_miles = round(random.uniform(1, 10), 1)
             # Random pace between 6:00 and 9:00 minutes per mile
             pace_min = random.randint(6, 9)
             pace_sec = random.randint(0, 59)

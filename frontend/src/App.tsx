@@ -162,7 +162,7 @@ export default function App() {
             >
               <Card>
                 <CardHeader>
-                  <CardTitle>Describe what youre looking for in a training plan</CardTitle>
+                  <CardTitle>Describe your ideal training plan</CardTitle>
                 </CardHeader>
 
                 <CardContent className="space-y-4">
@@ -272,6 +272,24 @@ export default function App() {
                   <Button disabled className="mt-3 w-full">
                     Connect Garmin
                   </Button>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle>Apple</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-gray-600">
+                    Apple integration coming soon.
+                  </p>
+                  <Button
+                    disabled
+                    variant="outline"
+                    className="mt-3 w-full border-gray-300 text-gray-600 bg-white hover:bg-white"
+                  >
+                    Connect Apple Health
+                </Button>
                 </CardContent>
               </Card>
             </div>

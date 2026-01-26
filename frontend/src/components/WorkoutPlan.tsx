@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "./ui/Card";
 import { Badge } from "./ui/Badge";
-import { Circle, Calendar, Timer } from "lucide-react";
+import { Circle, Calendar, Timer, ChevronLeft, ChevronRight } from "lucide-react";
 
 export interface Workout {
   day: string;
@@ -40,18 +40,45 @@ export function WorkoutPlan({ plan }: WorkoutPlanProps) {
       </CardHeader>
       <CardContent>
         {/* Week selector */}
-        <div className="flex gap-2 mb-4">
-          {plan.weeks.map((week, idx) => (
+        <div className="relative mb-4">
+          {/* Left arrow */}
+          <button
+            onClick={() => setActiveWeek(Math.max(activeWeek - 1, 0))}
+            disabled={activeWeek === 0}
+            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white shadow rounded-full p-2 disabled:opacity-30"
+          >
+            <ChevronLeft className="w-5 h-5 text-gray-600" />
+          </button>
+          {/* Scroll container */}
+          <div className="mx-10 overflow-x-auto">
+            <div className="flex gap-2 min-w-max">
+              {plan.weeks.map((week, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setActiveWeek(idx)}
+                  className={`px-4 py-2 rounded whitespace-nowrap transition
+                    ${
+                      activeWeek === idx
+                        ? "bg-blue-600 text-white"
+                        : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                    }`}
+                >
+                  Week {week.week}
+                </button>
+              ))}
+            </div>
+          </div>
+            {/* Right arrow */}
             <button
-              key={idx}
-              className={`px-3 py-1 rounded ${
-                activeWeek === idx ? "bg-blue-600 text-white" : "bg-gray-200 text-gray-700"
-              }`}
-              onClick={() => setActiveWeek(idx)}
+              onClick={() =>
+                setActiveWeek(Math.min(activeWeek + 1, plan.weeks.length - 1))
+              }
+              disabled={activeWeek === plan.weeks.length - 1}
+              className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white shadow rounded-full p-2 disabled:opacity-30"
             >
-              Week {week.week}
+            <ChevronRight className="w-5 h-5 text-gray-600" />
+
             </button>
-          ))}
         </div>
 
         {/* Show active week content */}

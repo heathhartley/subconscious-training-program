@@ -3,6 +3,7 @@ export interface Workout {
   type: string;
   duration: string;
   description: string;
+  miles?: number
 }
 
 export interface TrainingWeek {
