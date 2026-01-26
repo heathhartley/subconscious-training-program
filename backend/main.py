@@ -123,6 +123,7 @@ async def generate_endpoint(request: Request):
         input={
             "instructions": prompt,
             "tools": [{"type": "platform", "id": "strava_information"}],
+            # "tools": [{"type": "platform", "id": "web_search"}],
         },
         options={"await_completion": False},  
     )
