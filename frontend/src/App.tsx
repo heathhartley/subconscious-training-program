@@ -53,9 +53,8 @@ export default function App() {
 
   const pollPlan = async () => {
     pollCountRef.current += 1;
-    console.log(`Polling attempt ${pollCountRef.current}`);
 
-    if (pollCountRef.current >= 10) {
+    if (pollCountRef.current >= 30) {
       console.error("Max polling attempts reached");
       setLoadingPlan(false);
       setRunId(null);
